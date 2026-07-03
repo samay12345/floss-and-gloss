@@ -1,3 +1,7 @@
+"use client";
+
+import { scrollToSection } from "@/lib/scrollToSection";
+
 export default function Hero() {
   return (
     <section
@@ -35,12 +39,14 @@ export default function Hero() {
         <div className="mt-8 flex flex-wrap justify-center gap-4">
           <a
             href="#gallery"
+            onClick={(e) => scrollToSection(e, "gallery")}
             className="rounded-full bg-purple-deep px-7 py-3 text-sm font-semibold text-cream-soft shadow-md shadow-purple/30 transition-transform hover:-translate-y-0.5"
           >
             View the Gallery
           </a>
           <a
             href="#order"
+            onClick={(e) => scrollToSection(e, "order")}
             className="rounded-full border border-purple/40 bg-cream-soft px-7 py-3 text-sm font-semibold text-purple-deep transition-colors hover:bg-lavender"
           >
             Start Your Set

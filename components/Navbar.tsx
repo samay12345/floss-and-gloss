@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { scrollToSection } from "@/lib/scrollToSection";
 
 const links = [
   { href: "#gallery", label: "Gallery" },
@@ -43,10 +43,13 @@ export default function Navbar() {
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link
+        <a
           href="#top"
           className="flex items-center gap-2"
-          onClick={() => setMenuOpen(false)}
+          onClick={(e) => {
+            scrollToSection(e, "top");
+            setMenuOpen(false);
+          }}
         >
           <Image
             src="/images/brand/logo-circle.png"
@@ -59,13 +62,14 @@ export default function Navbar() {
           <span className="font-display text-2xl font-semibold text-purple-deep">
             Floss &amp; Gloss
           </span>
-        </Link>
+        </a>
 
         <div className="hidden items-center gap-8 md:flex">
           {links.map((link) => (
             <a
               key={link.href}
               href={link.href}
+              onClick={(e) => scrollToSection(e, link.href.slice(1))}
               className="text-sm font-medium text-muted transition-colors hover:text-purple-deep"
             >
               {link.label}
@@ -76,6 +80,7 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           <a
             href="#order"
+            onClick={(e) => scrollToSection(e, "order")}
             className="rounded-full bg-purple px-5 py-2 text-sm font-semibold text-cream-soft shadow-sm transition-colors hover:bg-purple-deep"
           >
             Order Now
@@ -115,7 +120,10 @@ export default function Navbar() {
             <a
               key={link.href}
               href={link.href}
-              onClick={() => setMenuOpen(false)}
+              onClick={(e) => {
+                scrollToSection(e, link.href.slice(1));
+                setMenuOpen(false);
+              }}
               className="rounded-lg px-2 py-3 text-base font-medium text-charcoal transition-colors hover:bg-lavender/60"
             >
               {link.label}
