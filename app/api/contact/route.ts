@@ -49,18 +49,24 @@ export async function POST(req: NextRequest) {
     submittedAt: new Date().toISOString(),
   };
 
-  await fs.mkdir(DATA_DIR, { recursive: true });
-
-  let existing: ContactRequest[] = [];
   try {
-    const raw = await fs.readFile(DATA_FILE, "utf-8");
-    existing = JSON.parse(raw);
-  } catch {
-    existing = [];
-  }
+    await fs.mkdir(DATA_DIR, { recursive: true });
 
-  existing.push(entry);
-  await fs.writeFile(DATA_FILE, JSON.stringify(existing, null, 2));
+    let existing: ContactRequest[] = [];
+    try {
+      const raw = await fs.readFile(DATA_FILE, "utf-8");
+      existing = JSON.parse(raw);
+    } catch {
+      existing = [];
+    }
+
+    existing.push(entry);
+    await fs.writeFile(DATA_FILE, JSON.stringify(existing, null, 2));
+  } catch (err) {
+    // Serverless platforms (e.g. Vercel) have a read-only filesystem,
+    // so this is expected to fail there — email is the reliable channel.
+    console.error("Failed to write local request log:", err);
+  }
 
   const toEmail = process.env.CONTACT_TO_EMAIL;
   if (toEmail && process.env.RESEND_API_KEY) {
